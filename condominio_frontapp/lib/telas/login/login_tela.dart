@@ -1,5 +1,6 @@
-import 'package:condominio_frontapp/widgets/menu_lateral.dart';
 import 'package:flutter/material.dart';
+import '/../api/repository/auth_repository.dart';
+import '/../widgets/menu_lateral.dart';
 
 class LoginTela extends StatefulWidget {
   const LoginTela({super.key});
@@ -9,6 +10,7 @@ class LoginTela extends StatefulWidget {
 }
 
 class _LoginTelaState extends State<LoginTela> {
+  final AuthRepository _authRepository = AuthRepository();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
@@ -57,9 +59,49 @@ class _LoginTelaState extends State<LoginTela> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Aqui você chamaria sua função de login via HTTP
-                    print('Login: ${_emailController.text}');
+                  onPressed: () async {
+                    final email = _emailController.text;
+                    final senha = _passwordController.text;
+
+                    try {
+                      final usuario = await _authRepository.login(email, senha);
+
+                      if (usuario != null && usuario.token != null) {
+                        print('Login OK! Token: ${usuario.token}');
+                        // Pesquisar como fazer depois para salvar o token
+                        Navigator.pushReplacementNamed(context, '/dashboard');
+                      } else {
+                        // Login falhou (resposta sem token)
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Erro'),
+                            content: const Text('Usuário ou senha inválidos'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      // Captura falhas no Dio ou erros inesperados
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Erro'),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   child: const Text('Login'),
                 ),
