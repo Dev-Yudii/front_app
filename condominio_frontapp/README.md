@@ -15,9 +15,18 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-# Lista de coisas que fiz até agora:
 
-> Estruturei algumas pastas dentro de lib
-    - Screens: A pasta onde ficarão todas as nessas telas
-    - 
-> 
+## Informações sobre as pastas que utilizaremos no nosso projeto
+
+- **lib/**: Aqui fica todo o código do nosso app.
+    - **api_client.dart**: É onde configuramos o Dio e o Logger, que servem para se comunicar com o back-end e mostrar detalhes da comunicação.
+        - **repository/**: Dentro dos repositóry estão os arquivos que usam dio para mandar e receber os dados do back.
+    - **models/**: Aqui ficam os arquivos das “entidades” do projeto.  
+      Esses arquivos ajudam a transformar os dados que vêm do back (JSON) em objetos do Dart, e também de Dart para JSON.  
+      O login entra aqui porque tem dados sensíveis.
+    - **telas/**: Onde ficam as telas do app.  
+      No Flutter, cada tela é formada por vários widgets.
+    - **widgets/**: Componentes que usamos em mais de uma tela, para não repetir código e manter tudo organizado.
+
+- **pubspec.yaml**: Arquivo que diz quais tecnologias estamos usando no projeto.  
+  Também serve para configurar imagens, fontes e outros recursos do app.
